@@ -20,54 +20,28 @@
         }
 
         .header-section { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px; padding: 0 5px; }
-        
         .brand-name { color: #333; font-size: 18px; letter-spacing: 0.5px; text-transform: uppercase; }
         .brand-name strong { font-weight: 900; color: #000; font-size: 20px; text-shadow: 1px 1px 0px rgba(255,255,255,0.7); }
         .brand-sub { font-size: 9px; color: #555; font-weight: bold; margin-top: 2px; display: block; }
         
         .solar-container { display: flex; flex-direction: column; align-items: center; position: relative; }
-        
-        .panda-icon { 
-            font-size: 28px; 
-            margin-bottom: -2px; 
-            animation: bouncePanda 2s infinite; 
-            z-index: 10;
-        }
-        
-        @keyframes bouncePanda { 
-            0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-5px); } 
-        }
+        .panda-icon { font-size: 28px; margin-bottom: -2px; animation: bouncePanda 2s infinite; z-index: 10; }
+        @keyframes bouncePanda { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-        .solar-panel { background: linear-gradient(to right, #3a2010, #4a2a18, #3a2010); width: 75px; height: 25px; border: 2px solid #555; border-radius: 3px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; position: relative; z-index: 5; }
+        .solar-panel { background: linear-gradient(to right, #3a2010, #4a2a18, #3a2010); width: 75px; height: 25px; border: 2px solid #555; border-radius: 3px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
         .solar-line { background: rgba(0,0,0,0.3); height: 100%; }
 
         .lcd-screen-container { background: #8e9e8c; border: 4px solid #a4b4a0; border-radius: 6px; box-shadow: inset 0 5px 10px rgba(0,0,0,0.5), 0 2px 2px white; padding: 10px; margin-bottom: 20px; }
         #display { width: 100%; height: 65px; font-size: 38px; text-align: right; border: none; background: transparent; color: #1c241b; font-family: 'Courier New', Courier, monospace; font-weight: bold; overflow: hidden; pointer-events: none; letter-spacing: 1px; }
 
         .keypad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex-grow: 1; margin-bottom: 10px; }
-        
-        button { 
-            font-size: 24px; 
-            font-weight: bold; 
-            border: 1px solid #999; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            /* Animation speed ko 0.05s se fast karke 0.01s kar diya gaya hai */
-            transition: all 0.01s linear;
-            box-shadow: 0 5px #b5b9ba, inset 0 1px 1px white;
-            display: flex; justify-content: center; align-items: center;
-        }
-        
+        button { font-size: 24px; font-weight: bold; border: 1px solid #999; border-radius: 6px; cursor: pointer; transition: all 0.01s linear; box-shadow: 0 5px #b5b9ba, inset 0 1px 1px white; display: flex; justify-content: center; align-items: center; }
         .num { background: #f1f2f6; color: #2f3542; }
         .num:active { box-shadow: 0 1px #b5b9ba; transform: translateY(4px); background: #e4e7eb; }
-        
         .op { background: #4b5563; color: white; border-color: #333; box-shadow: 0 5px #2d3748; }
         .op:active { box-shadow: 0 1px #2d3748; transform: translateY(4px); background: #374151; }
-        
         .clear-btn { background: #dc2626; color: white; border-color: #991b1b; box-shadow: 0 5px #991b1b; font-size: 18px; }
         .clear-btn:active { box-shadow: 0 1px #991b1b; transform: translateY(4px); background: #b91c1c; }
-        
         .equal-btn { background: #2563eb; color: white; border-color: #1d4ed8; box-shadow: 0 5px #1d4ed8; }
         .equal-btn:active { box-shadow: 0 1px #1d4ed8; transform: translateY(4px); background: #1d4ed8; }
     </style>
@@ -78,7 +52,7 @@
     <div class="header-section">
         <div style="padding-bottom: 5px;">
             <div class="brand-name"><strong>KHALID ALI</strong> PECHUHA</div>
-            <span class="brand-sub">DIGITAL SYNTH CALCULATOR</span>
+            <span class="brand-sub">TREBLE TICK CALCULATOR</span>
         </div>
         <div class="solar-container">
             <div class="panda-icon">&#128060;</div>
@@ -94,10 +68,10 @@
         <input type="text" id="display" readonly placeholder="0">
     </div>
 
-    <!-- Onclick ki jagah onpointerdown lagaya hai 0-second instant press ke liye -->
     <div class="keypad">
         <button class="clear-btn" onpointerdown="press('C')">AC</button>
-        <button class="clear-btn" onpointerdown="press('DEL')">DEL</button>
+        <!-- Yahan Backspace Emoji laga diya gaya hai -->
+        <button class="clear-btn" onpointerdown="press('DEL')">⌫</button>
         <button class="op" onpointerdown="press('/')">÷</button>
         <button class="op" onpointerdown="press('*')">×</button>
         
@@ -125,96 +99,51 @@
     const display = document.getElementById('display');
     let audioCtx = null;
 
-    // Frequencies ko Base se Treble (Light Tick) me badal diya hai
+    // Full Treble Mode (High Frequency)
     const tones = {
-        '1': 2000, '2': 2100, '3': 2200, '4': 2300, '5': 2400, 
-        '6': 2500, '7': 2600, '8': 2700, '9': 2800, '0': 1900,
-        '+': 3000, '-': 2900, '*': 3100, '/': 3200, 
-        '=': 3500, 'C': 1500, 'DEL': 1700, '.': 1800
+        '1': 4000, '2': 4200, '3': 4400, '4': 4600, '5': 4800, 
+        '6': 5000, '7': 5200, '8': 5400, '9': 5600, '0': 3800,
+        '+': 5800, '-': 5700, '*': 5900, '/': 6000, 
+        '=': 6500, 'C': 3500, 'DEL': 3600, '.': 3700
     };
 
     function playTickTone(val) {
         try {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
 
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             
-            let frequency = tones[val] || 2500;
+            osc.type = 'square'; // Harsh, sharp digital sound
+            osc.frequency.setValueAtTime(tones[val] || 4500, audioCtx.currentTime); 
             
-            osc.type = 'triangle'; // Sine ki jagah Triangle wave (zyada sharp tick ke liye)
-            osc.frequency.setValueAtTime(frequency, audioCtx.currentTime); 
-            
-            // Duration ko 0.1 se kam karke 0.02s kar diya taake aawaz lambi na kheinche (Bilkul tick kare)
-            gain.gain.setValueAtTime(0.5, audioCtx.currentTime); 
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02); 
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime); // Gain kam rakha taake 'Tick' sharp ho
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.015); // Ultra fast decay
             
             osc.connect(gain);
             gain.connect(audioCtx.destination);
-            
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.03);
+            osc.stop(audioCtx.currentTime + 0.015);
         } catch (e) {}
     }
 
     function press(val) {
-        playTickTone(val); // Instant light tick
-        
-        if (val === 'C') {
-            display.value = "";
-        } else if (val === 'DEL') {
-            display.value = display.value.slice(0, -1);
-        } else if (val === '=') {
-            if (display.value === "" || display.value === "ERROR") return;
-            
-            let expression = display.value;
-            expression = expression.replace(/[+\-*/]+$/, "");
-            
-            if (expression === "") {
-                display.value = "";
-                return;
-            }
-
-            try {
-                let result = eval(expression);
-                if (result % 1 !== 0) {
-                    result = parseFloat(result.toFixed(6));
-                }
-                display.value = result;
-            } catch (err) {
-                display.value = "ERROR";
-            }
+        playTickTone(val);
+        if (val === 'C') display.value = "";
+        else if (val === 'DEL') display.value = display.value.slice(0, -1);
+        else if (val === '=') {
+            try { 
+                let res = eval(display.value.replace(/[+\-*/]+$/, ""));
+                display.value = Number.isInteger(res) ? res : parseFloat(res.toFixed(6));
+            } catch { display.value = "ERROR"; }
         } else {
-            const operators = ['+', '-', '*', '/'];
-            
-            if (operators.includes(val)) {
-                if (display.value === "" || display.value === "ERROR") return;
-                
-                if (operators.includes(display.value.slice(-1))) {
-                    display.value = display.value.slice(0, -1) + val;
-                    return;
-                }
-            }
-
-            if (display.value === "0" || display.value === "ERROR") {
-                display.value = val;
-            } else {
-                display.value += val;
-            }
+            const ops = ['+', '-', '*', '/'];
+            if (ops.includes(val) && ops.includes(display.value.slice(-1))) display.value = display.value.slice(0, -1) + val;
+            else if (display.value === "0" || display.value === "ERROR") display.value = val;
+            else display.value += val;
         }
     }
-
-    document.body.addEventListener('touchstart', function() {
-        if(audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-    }, {passive: true});
 </script>
-
 </body>
 </html>
