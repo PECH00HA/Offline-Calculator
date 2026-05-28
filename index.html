@@ -21,20 +21,26 @@
 
         .header-section { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px; padding: 0 5px; }
         
-        /* Khalid Ali text ko bold aur highlight kiya gaya hai */
         .brand-name { color: #333; font-size: 18px; letter-spacing: 0.5px; text-transform: uppercase; }
         .brand-name strong { font-weight: 900; color: #000; font-size: 20px; text-shadow: 1px 1px 0px rgba(255,255,255,0.7); }
         .brand-sub { font-size: 9px; color: #555; font-weight: bold; margin-top: 2px; display: block; }
         
-        /* Solar Panel aur Panda ki Setting */
-        .solar-container { display: flex; flex-direction: column; align-items: center; }
-        .panda-icon { font-size: 22px; margin-bottom: 3px; animation: bouncePanda 2s infinite; }
+        .solar-container { display: flex; flex-direction: column; align-items: center; position: relative; }
+        
+        /* Panda ko bada aur clear kar diya gaya hai */
+        .panda-icon { 
+            font-size: 28px; 
+            margin-bottom: -2px; /* Solar panel ke theek ooper bitha diya */
+            animation: bouncePanda 2s infinite; 
+            z-index: 10;
+        }
+        
         @keyframes bouncePanda { 
             0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-4px); } 
+            50% { transform: translateY(-5px); } 
         }
 
-        .solar-panel { background: linear-gradient(to right, #3a2010, #4a2a18, #3a2010); width: 75px; height: 25px; border: 2px solid #555; border-radius: 3px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
+        .solar-panel { background: linear-gradient(to right, #3a2010, #4a2a18, #3a2010); width: 75px; height: 25px; border: 2px solid #555; border-radius: 3px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; position: relative; z-index: 5; }
         .solar-line { background: rgba(0,0,0,0.3); height: 100%; }
 
         .lcd-screen-container { background: #8e9e8c; border: 4px solid #a4b4a0; border-radius: 6px; box-shadow: inset 0 5px 10px rgba(0,0,0,0.5), 0 2px 2px white; padding: 10px; margin-bottom: 20px; }
@@ -75,8 +81,8 @@
             <span class="brand-sub">DIGITAL SYNTH CALCULATOR</span>
         </div>
         <div class="solar-container">
-            <!-- Cute Panda Added Here -->
-            <div class="panda-icon">🐼</div>
+            <!-- Yahan HTML Code lagaya hai taake har hal mein show ho -->
+            <div class="panda-icon">&#128060;</div>
             <div class="solar-panel">
                 <div class="solar-line"></div>
                 <div class="solar-line"></div>
@@ -143,7 +149,6 @@
             osc.type = 'sine'; 
             osc.frequency.setValueAtTime(frequency, audioCtx.currentTime); 
             
-            // VOLUME INCREASED TO 300% (0.15 se 0.8 kar diya gaya hai aur duration badhai hai)
             gain.gain.setValueAtTime(0.8, audioCtx.currentTime); 
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1); 
             
