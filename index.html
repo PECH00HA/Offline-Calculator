@@ -19,10 +19,21 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
         }
 
-        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px; }
-        .brand-name { color: #1e272e; font-size: 18px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+        .header-section { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px; padding: 0 5px; }
+        
+        /* Khalid Ali text ko bold aur highlight kiya gaya hai */
+        .brand-name { color: #333; font-size: 18px; letter-spacing: 0.5px; text-transform: uppercase; }
+        .brand-name strong { font-weight: 900; color: #000; font-size: 20px; text-shadow: 1px 1px 0px rgba(255,255,255,0.7); }
         .brand-sub { font-size: 9px; color: #555; font-weight: bold; margin-top: 2px; display: block; }
         
+        /* Solar Panel aur Panda ki Setting */
+        .solar-container { display: flex; flex-direction: column; align-items: center; }
+        .panda-icon { font-size: 22px; margin-bottom: 3px; animation: bouncePanda 2s infinite; }
+        @keyframes bouncePanda { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-4px); } 
+        }
+
         .solar-panel { background: linear-gradient(to right, #3a2010, #4a2a18, #3a2010); width: 75px; height: 25px; border: 2px solid #555; border-radius: 3px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
         .solar-line { background: rgba(0,0,0,0.3); height: 100%; }
 
@@ -59,14 +70,18 @@
 
 <div class="calculator-body">
     <div class="header-section">
-        <div>
-            <div class="brand-name">KHALID ALI PECHUHA</div>
+        <div style="padding-bottom: 5px;">
+            <div class="brand-name"><strong>KHALID ALI</strong> PECHUHA</div>
             <span class="brand-sub">DIGITAL SYNTH CALCULATOR</span>
         </div>
-        <div class="solar-panel">
-            <div class="solar-line"></div>
-            <div class="solar-line"></div>
-            <div class="solar-line"></div>
+        <div class="solar-container">
+            <!-- Cute Panda Added Here -->
+            <div class="panda-icon">🐼</div>
+            <div class="solar-panel">
+                <div class="solar-line"></div>
+                <div class="solar-line"></div>
+                <div class="solar-line"></div>
+            </div>
         </div>
     </div>
 
@@ -104,7 +119,6 @@
     const display = document.getElementById('display');
     let audioCtx = null;
 
-    // Built-in 0-Delay Tone Frequencies for Each Button
     const tones = {
         '1': 300, '2': 330, '3': 360, '4': 390, '5': 420, 
         '6': 450, '7': 480, '8': 510, '9': 540, '0': 270,
@@ -124,27 +138,25 @@
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             
-            // Har button ki apni frequency bajegi (jaise real digital tools me hoti hai)
             let frequency = tones[val] || 400;
             
             osc.type = 'sine'; 
             osc.frequency.setValueAtTime(frequency, audioCtx.currentTime); 
             
-            gain.gain.setValueAtTime(0.15, audioCtx.currentTime); // Normal volume
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06); // 0.06 seconds me tone finish
+            // VOLUME INCREASED TO 300% (0.15 se 0.8 kar diya gaya hai aur duration badhai hai)
+            gain.gain.setValueAtTime(0.8, audioCtx.currentTime); 
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1); 
             
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.06);
-        } catch (e) {
-            // Fallback for security
-        }
+            osc.stop(audioCtx.currentTime + 0.1);
+        } catch (e) {}
     }
 
     function press(val) {
-        playSynthTone(val); // Instant 0-second lag built-in audio trigger
+        playSynthTone(val); 
         
         if (val === 'C') {
             display.value = "";
@@ -154,7 +166,6 @@
             if (display.value === "" || display.value === "ERROR") return;
             
             let expression = display.value;
-            // Cleans any duplicate or extra operators from the back
             expression = expression.replace(/[+\-*/]+$/, "");
             
             if (expression === "") {
@@ -191,7 +202,6 @@
         }
     }
 
-    // Direct Webview Wakeup Hook
     document.body.addEventListener('touchstart', function() {
         if(audioCtx && audioCtx.state === 'suspended') {
             audioCtx.resume();
