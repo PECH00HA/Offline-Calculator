@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Khalid Ali Pechuha - Classic Calculator</title>
     <style>
-        /* Full Screen & Reset Settings */
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; touch-action: manipulation; }
         body { background: #111; display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw; font-family: 'Arial', sans-serif; overflow: hidden; }
         
-        /* Casio Retro Body Container */
         .calculator-body { 
-            background: #d6dadb; /* Classic Casio Light Grey */
+            background: #d6dadb; 
             width: 100vw; 
             height: 100vh; 
             padding: 20px; 
@@ -21,25 +19,18 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
         }
 
-        /* Header Section (Brand Name & Solar Panel) */
         .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px; }
-        
-        /* Casio Style Name Printing */
-        .brand-name { color: #1e272e; font-size: 18px; font-weight: 900; letter-spacing: 1px; font-family: 'Helvetica Neue', Arial, sans-serif; text-transform: uppercase; }
+        .brand-name { color: #1e272e; font-size: 18px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
         .brand-sub { font-size: 9px; color: #555; font-weight: bold; margin-top: 2px; display: block; }
         
-        /* Realistic Solar Panel */
         .solar-panel { background: linear-gradient(to right, #3a2010, #4a2a18, #3a2010); width: 75px; height: 25px; border: 2px solid #555; border-radius: 3px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
         .solar-line { background: rgba(0,0,0,0.3); height: 100%; }
 
-        /* Old LCD Display Screen */
         .lcd-screen-container { background: #8e9e8c; border: 4px solid #a4b4a0; border-radius: 6px; box-shadow: inset 0 5px 10px rgba(0,0,0,0.5), 0 2px 2px white; padding: 10px; margin-bottom: 20px; }
         #display { width: 100%; height: 65px; font-size: 38px; text-align: right; border: none; background: transparent; color: #1c241b; font-family: 'Courier New', Courier, monospace; font-weight: bold; overflow: hidden; pointer-events: none; letter-spacing: 1px; }
 
-        /* Buttons Keypad Grid */
         .keypad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex-grow: 1; margin-bottom: 10px; }
         
-        /* Classic 3D Buttons Styling */
         button { 
             font-size: 24px; 
             font-weight: bold; 
@@ -51,19 +42,15 @@
             display: flex; justify-content: center; align-items: center;
         }
         
-        /* Numbers Buttons (Light Grey) */
         .num { background: #f1f2f6; color: #2f3542; }
         .num:active { box-shadow: 0 1px #b5b9ba; transform: translateY(4px); background: #e4e7eb; }
         
-        /* Operators Buttons (Dark Grey) */
         .op { background: #4b5563; color: white; border-color: #333; box-shadow: 0 5px #2d3748; }
         .op:active { box-shadow: 0 1px #2d3748; transform: translateY(4px); background: #374151; }
         
-        /* Clear / Delete Buttons (Retro Muted Red) */
         .clear-btn { background: #dc2626; color: white; border-color: #991b1b; box-shadow: 0 5px #991b1b; font-size: 18px; }
         .clear-btn:active { box-shadow: 0 1px #991b1b; transform: translateY(4px); background: #b91c1c; }
         
-        /* Equal Button (Classic Blue/Green) */
         .equal-btn { background: #2563eb; color: white; border-color: #1d4ed8; box-shadow: 0 5px #1d4ed8; }
         .equal-btn:active { box-shadow: 0 1px #1d4ed8; transform: translateY(4px); background: #1d4ed8; }
     </style>
@@ -71,7 +58,6 @@
 <body>
 
 <div class="calculator-body">
-    <!-- Header Area with Owner Name and Solar Panel -->
     <div class="header-section">
         <div>
             <div class="brand-name">KHALID ALI PECHUHA</div>
@@ -84,12 +70,10 @@
         </div>
     </div>
 
-    <!-- Old LCD Display -->
     <div class="lcd-screen-container">
         <input type="text" id="display" readonly placeholder="0">
     </div>
 
-    <!-- Casio Classic Keypad -->
     <div class="keypad">
         <button class="clear-btn" onclick="press('C')">AC</button>
         <button class="clear-btn" onclick="press('DEL')">DEL</button>
@@ -119,32 +103,30 @@
 <script>
     const display = document.getElementById('display');
 
-    // 100% Offline Hardware-Level Tick Sound Generator
+    // 100% Offline Embedded Base64 Audio (Real Hardware Mechanical Click)
+    const tick = new Audio("data:audio/wav;base64,UklGRlQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YRAAAAAAAP////8AAAAA//8AAP//AAAAAAAAAA==");
+
     function playTickSound() {
-        try {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            oscillator.type = 'triangle'; 
-            oscillator.frequency.setValueAtTime(500, audioCtx.currentTime); // Crisp mechanical sound
-            
-            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04); // Very short click
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.04);
-        } catch (e) {
-            // Safe fallback for older android webviews
-        }
+        // Reset sound to start and play instantly
+        tick.currentTime = 0;
+        tick.play().catch(function(error) {
+            // Agar browser block kare to secondary audio context bypass lagaya hai
+            const context = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = context.createOscillator();
+            const gain = context.createGain();
+            osc.type = 'sine';
+            oscillator.frequency.setValueAtTime(600, context.currentTime);
+            gain.gain.setValueAtTime(0.1, context.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.03);
+            osc.connect(gain);
+            gain.connect(context.destination);
+            osc.start();
+            osc.stop(context.currentTime + 0.03);
+        });
     }
 
-    // Calculator Logic
     function press(val) {
-        playTickSound(); // Har button press par awaz aayegi
+        playTickSound(); // Har click par lazmi aawaz aayegi
         
         if (val === 'C') {
             display.value = "";
@@ -153,9 +135,7 @@
         } else if (val === '=') {
             if (display.value === "") return;
             try {
-                // Formatting equations safely
                 let result = eval(display.value);
-                // Decimal points handle karne ke liye
                 if (result % 1 !== 0) {
                     result = parseFloat(result.toFixed(6));
                 }
